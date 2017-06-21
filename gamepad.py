@@ -18,7 +18,7 @@ buttonMappings = [
                 HIDButtons.B,
                 HIDButtons.X,
                 HIDButtons.Y,
-                HIDButtons.SELECT,
+                HIDButtons.SELECT, #Z
                 HIDButtons.R,
                 HIDButtons.L,
                 HIDButtons.START,
@@ -96,14 +96,12 @@ while done==False:
                         print("Joystick {} button {} pressed.".format(event.joy,event.button))
                         server.press(buttonMappings[event.button])
                         server.send()
-                        #server.press(buttonMappings[event.button])
                 if event.type == pygame.JOYBUTTONUP:
                         print("Joystick {} button {} released.".format(event.joy,event.button))
                         server.unpress(buttonMappings[event.button])
                         server.send()
-                        #server.unpress(buttonMappings[event.button])
                 if event.type == pygame.JOYAXISMOTION:
-                        if event.axis in range(2,3): print("Joystick {} axis {} moved to {}.".format(event.joy,event.axis, event.value))
+                        #if event.axis in range(2,3): print("Joystick {} axis {} moved to {}.".format(event.joy,event.axis, event.value))
                         if event.axis == 0: server.circle_pad_coords[0] = int(32767*event.value) #ls x
                         if event.axis == 1: server.circle_pad_coords[1] = int(-32767*event.value) #ls y
                         if event.axis == 2: #l trig
@@ -120,8 +118,8 @@ while done==False:
 print("resetting everything...")
 server.circle_pad_coords[0:2] = [0,0]
 server.cstick_coords[0:2] = [0,0]
-for fuck in HIDButtons: server.unpress(fuck)
-for shit in N3DS_Buttons: server.unpress(shit)
+for button in HIDButtons: server.unpress(button)
+for button in N3DS_Buttons: server.unpress(button)
 for i in range(1,50):
         server.send()
 pygame.quit()
