@@ -1,5 +1,5 @@
 import sys, time
-from tppflush import *
+from TPPFLUSH.tppflush import *
 
 if len(sys.argv) < 2:
 	server = input("3DS IP >").strip()
