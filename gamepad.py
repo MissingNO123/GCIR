@@ -3,6 +3,8 @@ import sys, time
 from TPPFLUSH.tppflush import *
 import pygame
 
+done=False
+
 buttonMappings = [
                 HIDButtons.A,
                 HIDButtons.B,
@@ -50,8 +52,6 @@ else:
         
 server=LumaInputServer(server)
 
-done=False
-
 #time.sleep(3)
 #server.hid_press(HIDButtons.X) #to show it works
 #server.send()
@@ -63,8 +63,6 @@ pygame.display.set_caption('touchscreen')
 pygame.display.update()
 
 pygame.joystick.init()
-
-
 
 joystick_count = pygame.joystick.get_count()
 print("Number of joysticks: {}".format(joystick_count) )
@@ -81,7 +79,6 @@ for i in range(joystick_count):
         print(" Number of buttons: {}".format(buttons))
         hats = joystick.get_numhats()
         print(" Number of hats: {}".format(hats))
-        
 
 print("ready!")
 while done==False:
@@ -160,16 +157,13 @@ while done==False:
                         if event.key == KBDButtons.HOME: #home
                                 server.special_press(Special_Buttons.HOME)
                                 #print("HOME")
-                        if event.key == KBDButtons.POWER: #home
+                        if event.key == KBDButtons.POWER: #power
                                 server.special_press(Special_Buttons.POWER)
                                 #print("POWER")
                                 
                         if event.key == pygame.K_ESCAPE:
-                                for x in HIDButtons:
-                                        server.hid_unpress(x)
-                                print("unpressing all buttons...")
-                                server.send()
-                                quit()
+                                server.clear_everything()
+                                done = True
                         server.send()
                         
                 elif event.type == pygame.KEYUP:
@@ -241,7 +235,7 @@ while done==False:
                         server.send()
                         
                 #server.send()       #0sx 1sy 4cy 5cx 2l 3r
-print("resetting everything...")
+print("clearing everything...")
 server.clear_everything()
 for i in range(1,50):
         server.send()
