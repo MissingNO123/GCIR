@@ -1,5 +1,7 @@
+print("please wait...")
 import sys, time
 from TPPFLUSH.tppflush import *
+import pygame
 
 buttonMappings = [
                 HIDButtons.A,
@@ -47,9 +49,6 @@ else:
         server = sys.argv[1]
         
 server=LumaInputServer(server)
-        
-print("please wait...")
-import pygame
 
 done=False
 
@@ -243,10 +242,7 @@ while done==False:
                         
                 #server.send()       #0sx 1sy 4cy 5cx 2l 3r
 print("resetting everything...")
-server.circle_pad_coords[0:2] = [0,0]
-server.cstick_coords[0:2] = [0,0]
-for button in HIDButtons: server.unpress(button)
-for button in N3DS_Buttons: server.unpress(button)
+server.clear_everything()
 for i in range(1,50):
         server.send()
 pygame.quit()
