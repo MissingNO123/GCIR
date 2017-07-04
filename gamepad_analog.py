@@ -1,12 +1,11 @@
 import sys, time
-
 from TPPFLUSH.tppflush import *
 
 if len(sys.argv) < 2:
 	server = input("3DS IP >").strip()
 else:
         server = sys.argv[1]
-
+        
 server=LumaInputServer(server)
         
 print("please wait...")
@@ -32,6 +31,10 @@ buttonMappings = [
         HIDButtons.B,
         HIDButtons.Y
 ]
+
+#time.sleep(3)
+#server.hid_press(HIDButtons.X) #to show it works
+#server.send()
 
 pygame.init()
 screen = pygame.display.set_mode((320, 240))
@@ -95,13 +98,53 @@ while done==False:
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
                 if event.type == pygame.JOYBUTTONDOWN:
                         print("Joystick {} button {} pressed.".format(event.joy,event.button))
-                        server.press(buttonMappings[event.button])
+                        if 4 <= event.button <= 7:
+                                axis_x = 0
+                                axis_y = 0
+                                if event.button == 4:
+                                        axis_y = 32767
+                                if event.button == 6:
+                                        axis_y = -32767
+                                if event.button == 5:
+                                        axis_x = 32767
+                                if event.button == 7:
+                                        axis_x = -32767
+
+                                server.circle_pad_coords[0] = axis_x #ls x
+                                server.circle_pad_coords[1] = axis_y #ls 
+                        else:
+                                server.press(buttonMappings[event.button])
+                        
                         server.send()
                 if event.type == pygame.JOYBUTTONUP:
                         print("Joystick {} button {} released.".format(event.joy,event.button))
-                        server.unpress(buttonMappings[event.button])
+                        if 4 <= event.button <= 7:
+                                axis_x = 0
+                                axis_y = 0
+
+                                server.circle_pad_coords[0] = axis_x #ls x
+                                server.circle_pad_coords[1] = axis_y #ls 
+                        else:
+                                server.unpress(buttonMappings[event.button])
+
                         server.send()
+                '''
+                if event.type == pygame.JOYAXISMOTION:
+                        #if event.axis in range(2,3): print("Joystick {} axis {} moved to {}.".format(event.joy,event.axis, event.value))
+                        if event.axis == 0: server.circle_pad_coords[0] = int(32767*event.value) #ls x
+                        if event.axis == 1: server.circle_pad_coords[1] = int(-32767*event.value) #ls y
+                        if event.axis == 2: #l trig
+                                if event.value >= 0: server.press(HIDButtons.L)
+                                else: server.unpress(HIDButtons.L)
+                        if event.axis == 3: #r trig
+                                if event.value >= 0: server.press(HIDButtons.R)
+                                else: server.unpress(HIDButtons.R)
+                        if event.axis == 4: print("soon") #rs y
+                        if event.axis == 5: print("TM")   #rs x
+                        server.send()
+                '''
                         
+                #server.send()       #0sx 1sy 4cy 5cx 2l 3r
 print("resetting everything...")
 server.circle_pad_coords[0:2] = [0,0]
 server.cstick_coords[0:2] = [0,0]
