@@ -5,6 +5,9 @@ import pygame
 
 done=False
 
+#edit this to True to print the bytes that are sent.
+print_bytes=False
+
 buttonMappings = [
                 HIDButtons.A,
                 HIDButtons.B,
@@ -54,7 +57,7 @@ server=LumaInputServer(server)
 
 #time.sleep(3)
 #server.hid_press(HIDButtons.X) #to show it works
-#server.send()
+#server.send(print_bytes)
 
 pygame.init()
 screen = pygame.display.set_mode((320, 240))
@@ -91,10 +94,10 @@ while done==False:
                         pos = pygame.mouse.get_pos()
                         server.touch(pos[0], pos[1])
                         #print("THSC: ",pos[0],",",pos[1])
-                        server.send()
+                        server.send(print_bytes)
                 elif event.type == pygame.MOUSEBUTTONUP:
                         server.clear_touch()
-                        server.send()
+                        server.send(print_bytes)
 
                 #Keyboard Mappings
                 elif event.type == pygame.KEYDOWN:
@@ -164,7 +167,7 @@ while done==False:
                         if event.key == pygame.K_ESCAPE:
                                 server.clear_everything()
                                 done = True
-                        server.send()
+                        server.send(print_bytes)
                         
                 elif event.type == pygame.KEYUP:
                         if event.key == KBDButtons.D_UP:
@@ -209,17 +212,17 @@ while done==False:
                                 server.special_unpress(Special_Buttons.HOME)
                         if event.key == KBDButtons.POWER: #pw
                                 server.special_unpress(Special_Buttons.POWER)
-                        server.send()
+                        server.send(print_bytes)
 
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
                 if event.type == pygame.JOYBUTTONDOWN:
                         print("Joystick {} button {} pressed.".format(event.joy,event.button))
                         server.press(buttonMappings[event.button])
-                        server.send()
+                        server.send(print_bytes)
                 if event.type == pygame.JOYBUTTONUP:
                         print("Joystick {} button {} released.".format(event.joy,event.button))
                         server.unpress(buttonMappings[event.button])
-                        server.send()
+                        server.send(print_bytes)
                 if event.type == pygame.JOYAXISMOTION:
                         #if event.axis in range(2,3): print("Joystick {} axis {} moved to {}.".format(event.joy,event.axis, event.value))
                         if event.axis == 0: server.circle_pad_coords[0] = int(32767*event.value) #ls x
@@ -232,13 +235,13 @@ while done==False:
                                 else: server.unpress(HIDButtons.R)
                         if event.axis == 4: print("soon") #rs y
                         if event.axis == 5: print("TM")   #rs x
-                        server.send()
+                        server.send(print_bytes)
                         
-                #server.send()       #0sx 1sy 4cy 5cx 2l 3r
+                #server.send(print_bytes)       #0sx 1sy 4cy 5cx 2l 3r
 print("clearing everything...")
 server.clear_everything()
 for i in range(1,50):
-        server.send()
+        server.send(print_bytes)
 pygame.quit()
         
         
