@@ -1,4 +1,4 @@
-# gcc-thing
+# GCIR - Gamecube Controller Input Redirect
 Fully re-mappable DInput GCN controller to Luma InputRedirect.
 Also supports keyboard inputs.
 
