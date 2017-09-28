@@ -30,10 +30,10 @@ class KBDButtons(IntEnum):
         C_LEFT = pygame.K_a
         C_RIGHT = pygame.K_d
 
-        D_UP = pygame.K_UP
-        D_DOWN = pygame.K_DOWN
-        D_LEFT = pygame.K_LEFT
-        D_RIGHT = pygame.K_RIGHT
+        DPADUP = pygame.K_UP
+        DPADDOWN = pygame.K_DOWN
+        DPADLEFT = pygame.K_LEFT
+        DPADRIGHT = pygame.K_RIGHT
 
         A = pygame.K_j
         B = pygame.K_k
@@ -48,8 +48,6 @@ class KBDButtons(IntEnum):
 
         HOME = pygame.K_HOME
         POWER = pygame.K_END
-
-dpad_name_map = {"D_UP": "DPADUP", "D_LEFT": "DPADLEFT","D_DOWN":"DPADDOWN","D_RIGHT":"DPADRIGHT"} #map from name in KBDButtons to name in HIDButtons
 
 if len(sys.argv) < 2:
 	server = input("3DS IP >").strip()
@@ -120,12 +118,7 @@ while done==False:
                         for button in KBDButtons:
                             if event.key == button:
                                 if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B
-                                        server.press(HIDButtons[button])
-                                        #print(button.name)
-
-                                #dpadbuttons have a different name in HIDButtons
-                                if button.name in dpad_name_map.keys():
-                                        server.press(HIDButtons[dpad_name_map[button.name]])
+                                        server.press(HIDButtons[button.name])
                                         #print(button.name)
 
                         if event.key == KBDButtons.ZL: #zl
@@ -159,11 +152,7 @@ while done==False:
                         for button in KBDButtons:
                             if event.key == button:
                                 if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B
-                                        server.unpress(HIDButtons[button])
-
-                                #dpadbuttons have a different name in HIDButtons
-                                if button.name in dpad_name_map.keys():
-                                        server.unpress(HIDButtons[dpad_name_map[button.name]])
+                                        server.unpress(HIDButtons[button.name])
 
                         if event.key == KBDButtons.ZL: #zl
                                 server.n3ds_zlzr_unpress(N3DS_Buttons.ZL)
