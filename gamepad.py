@@ -114,7 +114,7 @@ while done==False:
                         if event.key == KBDButtons.C_RIGHT:
                                 server.circle_pad_set(CPAD_Commands.CPADRIGHT)
                                 #print("C_RIGHT")
-
+                              
                         for button in KBDButtons:
                             if event.key == button:
                                 if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B

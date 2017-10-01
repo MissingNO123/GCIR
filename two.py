@@ -33,10 +33,10 @@ class KBDButtons(int):
         C_LEFT = pygame.K_a
         C_RIGHT = pygame.K_d
 
-        D_UP = pygame.K_UP
-        D_DOWN = pygame.K_DOWN
-        D_LEFT = pygame.K_LEFT
-        D_RIGHT = pygame.K_RIGHT
+        DPADUP = pygame.K_UP
+        DPADDOWN = pygame.K_DOWN
+        DPADLEFT = pygame.K_LEFT
+        DPADRIGHT = pygame.K_RIGHT
 
         A = pygame.K_j
         B = pygame.K_k
@@ -123,16 +123,16 @@ while done==False:
                                         servers[i].circle_pad_set(CPAD_Commands.CPADRIGHT)
                                         #print("C_RIGHT")
                                         
-                                if event.key == KBDButtons.D_UP:
+                                if event.key == KBDButtons.DPADUP:
                                         servers[i].hid_press(HIDButtons.DPADUP)
                                         #print("UP")
-                                if event.key == KBDButtons.D_LEFT:
+                                if event.key == KBDButtons.DPADLEFT:
                                         servers[i].hid_press(HIDButtons.DPADLEFT)
                                         #print("LEFT")
-                                if event.key == KBDButtons.D_DOWN:
+                                if event.key == KBDButtons.DPADDOWN:
                                         servers[i].hid_press(HIDButtons.DPADDOWN)
                                         #print("DOWN")
-                                if event.key == KBDButtons.D_RIGHT:
+                                if event.key == KBDButtons.DPADRIGHT:
                                         servers[i].hid_press(HIDButtons.DPADRIGHT)
                                         #print("RIGHT")
                                         
@@ -179,13 +179,13 @@ while done==False:
                                 servers[i].send(print_bytes)
                                 
                         elif event.type == pygame.KEYUP:
-                                if event.key == KBDButtons.D_UP:
+                                if event.key == KBDButtons.DPADUP:
                                         servers[i].hid_unpress(HIDButtons.DPADUP)
-                                if event.key == KBDButtons.D_LEFT:
+                                if event.key == KBDButtons.DPADLEFT:
                                         servers[i].hid_unpress(HIDButtons.DPADLEFT)
-                                if event.key == KBDButtons.D_DOWN:
+                                if event.key == KBDButtons.DPADDOWN:
                                         servers[i].hid_unpress(HIDButtons.DPADDOWN)
-                                if event.key == KBDButtons.D_RIGHT:
+                                if event.key == KBDButtons.DPADRIGHT:
                                         servers[i].hid_unpress(HIDButtons.DPADRIGHT)
 
                                 if event.key == KBDButtons.C_UP:

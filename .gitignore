@@ -1,0 +1,9 @@
+
+.DS_Store
+*.spec
+*.toc
+*.pkg
+*.pyz
+*.pyc
+dist
+build
