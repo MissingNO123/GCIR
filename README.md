@@ -4,6 +4,8 @@ Also supports remappable keyboard inputs.
 
 Technically supports any DInput device (i.e. Windows joystick), or any device that PyGame supports (i.e. XBox 360 Controller), but is currently mapped for a Gamecube Controller via a USB adapter.
 
+Also supports putting a picture over the touch screen to help with clicking on things. Put a picture named "home.jpg" in the images folder (or name your own by changing the source)
+
 To remap controls, just edit the buttonMappings array or KBDButtons class in gamepad.py (or two.py if using multiple systems). 
 
 The buttonMappings array is a list of every button on your controller in order from 0 mapped to a 3DS button, so if you want button 0 on your controller to be button A on the 3DS, put `HIDButtons.A` first in the list. 
