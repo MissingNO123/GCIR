@@ -2,6 +2,7 @@ print("please wait...")
 import sys, time
 from TPPFLUSH.tppflush import *
 import pygame
+from enum import IntEnum
 
 done=False
 
@@ -23,7 +24,7 @@ buttonMappings = [
                 HIDButtons.DPADRIGHT
         ]
 
-class KBDButtons(int):
+class KBDButtons(IntEnum):
         C_UP = pygame.K_w
         C_DOWN = pygame.K_s
         C_LEFT = pygame.K_a
@@ -113,50 +114,19 @@ while done==False:
                         if event.key == KBDButtons.C_RIGHT:
                                 server.circle_pad_set(CPAD_Commands.CPADRIGHT)
                                 #print("C_RIGHT")
-                                
-                        if event.key == KBDButtons.DPADUP:
-                                server.hid_press(HIDButtons.DPADUP)
-                                #print("UP")
-                        if event.key == KBDButtons.DPADLEFT:
-                                server.hid_press(HIDButtons.DPADLEFT)
-                                #print("LEFT")
-                        if event.key == KBDButtons.DPADDOWN:
-                                server.hid_press(HIDButtons.DPADDOWN)
-                                #print("DOWN")
-                        if event.key == KBDButtons.DPADRIGHT:
-                                server.hid_press(HIDButtons.DPADRIGHT)
-                                #print("RIGHT")
-                                
-                        if event.key == KBDButtons.B: #b
-                                server.hid_press(HIDButtons.B)
-                                #print("B")
-                        if event.key == KBDButtons.A: #a
-                                server.hid_press(HIDButtons.A)
-                                #print("A")
-                        if event.key == KBDButtons.Y: #y
-                                server.hid_press(HIDButtons.Y)
-                                #print("Y")
-                        if event.key == KBDButtons.X: #x
-                                server.hid_press(HIDButtons.X)
-                                #print("X")
-                        if event.key == KBDButtons.L: #l
-                                server.hid_press(HIDButtons.L)
-                                #print("L")
-                        if event.key == KBDButtons.R: #r
-                                server.hid_press(HIDButtons.R)
-                                #print("R")
+                              
+                        for button in KBDButtons:
+                            if event.key == button:
+                                if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B
+                                        server.press(HIDButtons[button.name])
+                                        #print(button.name)
+
                         if event.key == KBDButtons.ZL: #zl
                                 server.n3ds_zlzr_press(N3DS_Buttons.ZL)
                                 #print("ZL")
                         if event.key == KBDButtons.ZR: #zr
                                 server.n3ds_zlzr_press(N3DS_Buttons.ZR)
                                 #print("ZR")
-                        if event.key == KBDButtons.START: #st
-                                server.hid_press(HIDButtons.START)
-                                #print("START")
-                        if event.key == KBDButtons.SELECT: #sl
-                                server.hid_press(HIDButtons.SELECT)
-                                #print("SELECT")
                         if event.key == KBDButtons.HOME: #home
                                 server.special_press(Special_Buttons.HOME)
                                 #print("HOME")
@@ -170,15 +140,6 @@ while done==False:
                         server.send(print_bytes)
                         
                 elif event.type == pygame.KEYUP:
-                        if event.key == KBDButtons.DPADUP:
-                                server.hid_unpress(HIDButtons.DPADUP)
-                        if event.key == KBDButtons.DPADLEFT:
-                                server.hid_unpress(HIDButtons.DPADLEFT)
-                        if event.key == KBDButtons.DPADDOWN:
-                                server.hid_unpress(HIDButtons.DPADDOWN)
-                        if event.key == KBDButtons.DPADRIGHT:
-                                server.hid_unpress(HIDButtons.DPADRIGHT)
-
                         if event.key == KBDButtons.C_UP:
                                 server.circle_pad_coords[1] = 0
                         if event.key == KBDButtons.C_LEFT:
@@ -188,30 +149,20 @@ while done==False:
                         if event.key == KBDButtons.C_RIGHT:
                                 server.circle_pad_coords[0] = 0
                         
-                        if event.key == KBDButtons.B: #b
-                                server.hid_unpress(HIDButtons.B)
-                        if event.key == KBDButtons.A: #a
-                                server.hid_unpress(HIDButtons.A)
-                        if event.key == KBDButtons.Y: #y
-                                server.hid_unpress(HIDButtons.Y)
-                        if event.key == KBDButtons.X: #x
-                                server.hid_unpress(HIDButtons.X)
-                        if event.key == KBDButtons.L: #l
-                                server.hid_unpress(HIDButtons.L)
-                        if event.key == KBDButtons.R: #r
-                                server.hid_unpress(HIDButtons.R)
+                        for button in KBDButtons:
+                            if event.key == button:
+                                if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B
+                                        server.unpress(HIDButtons[button.name])
+
                         if event.key == KBDButtons.ZL: #zl
                                 server.n3ds_zlzr_unpress(N3DS_Buttons.ZL)
                         if event.key == KBDButtons.ZR: #zr
                                 server.n3ds_zlzr_unpress(N3DS_Buttons.ZR)
-                        if event.key == KBDButtons.START: #st
-                                server.hid_unpress(HIDButtons.START)
-                        if event.key == KBDButtons.SELECT: #sl
-                                server.hid_unpress(HIDButtons.SELECT)
                         if event.key == KBDButtons.HOME: #hm
                                 server.special_unpress(Special_Buttons.HOME)
                         if event.key == KBDButtons.POWER: #pw
                                 server.special_unpress(Special_Buttons.POWER)
+
                         server.send(print_bytes)
 
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
