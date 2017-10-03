@@ -62,7 +62,16 @@ server=LumaInputServer(server)
 
 pygame.init()
 screen = pygame.display.set_mode((320, 240))
-screen.fill((0,0,0))
+#screen.fill((0,0,0))
+TCImg="images/home.jpg"
+try:
+        img=pygame.image.load(TCImg)
+except pygame.error:
+        print("Could not find touch screen file, using default black screen")
+        screen.fill((0,0,0))
+else:
+        screen.blit(img,(0,0))
+        pygame.display.flip()
 pygame.display.set_caption('touchscreen')
 pygame.display.update()
 
@@ -121,16 +130,16 @@ while done==False:
                                         server.press(HIDButtons[button.name])
                                         #print(button.name)
 
-                        if event.key == KBDButtons.ZL: #zl
+                        if event.key == KBDButtons.ZL: #ZL
                                 server.n3ds_zlzr_press(N3DS_Buttons.ZL)
                                 #print("ZL")
-                        if event.key == KBDButtons.ZR: #zr
+                        if event.key == KBDButtons.ZR: #ZR
                                 server.n3ds_zlzr_press(N3DS_Buttons.ZR)
                                 #print("ZR")
-                        if event.key == KBDButtons.HOME: #home
+                        if event.key == KBDButtons.HOME: #Home
                                 server.special_press(Special_Buttons.HOME)
                                 #print("HOME")
-                        if event.key == KBDButtons.POWER: #power
+                        if event.key == KBDButtons.POWER: #Power
                                 server.special_press(Special_Buttons.POWER)
                                 #print("POWER")
                                 
@@ -154,13 +163,13 @@ while done==False:
                                 if hasattr(HIDButtons, button.name): #KBDButtons.B -> HIDButtons.B
                                         server.unpress(HIDButtons[button.name])
 
-                        if event.key == KBDButtons.ZL: #zl
+                        if event.key == KBDButtons.ZL: #Zl
                                 server.n3ds_zlzr_unpress(N3DS_Buttons.ZL)
-                        if event.key == KBDButtons.ZR: #zr
+                        if event.key == KBDButtons.ZR: #Zr
                                 server.n3ds_zlzr_unpress(N3DS_Buttons.ZR)
-                        if event.key == KBDButtons.HOME: #hm
+                        if event.key == KBDButtons.HOME: #Home
                                 server.special_unpress(Special_Buttons.HOME)
-                        if event.key == KBDButtons.POWER: #pw
+                        if event.key == KBDButtons.POWER: #Power
                                 server.special_unpress(Special_Buttons.POWER)
 
                         server.send(print_bytes)
@@ -179,7 +188,7 @@ while done==False:
                         if event.axis == 0: server.circle_pad_coords[0] = int(32767*event.value) #ls x
                         if event.axis == 1: server.circle_pad_coords[1] = int(-32767*event.value) #ls y
                         if event.axis == 2: #l trig
-                                if event.value >= 0: server.press(HIDButtons.L)
+                                if event.value >= 0: server.press(HIDButtons.L) #Zero is a half-press on GC Controller
                                 else: server.unpress(HIDButtons.L)
                         if event.axis == 3: #r trig
                                 if event.value >= 0: server.press(HIDButtons.R)
@@ -188,7 +197,7 @@ while done==False:
                         if event.axis == 5: server.cstick_coords[0] = int(32767*event.value) #rs x
                         server.send(print_bytes)
                         
-                #server.send(print_bytes)       #0sx 1sy 4cy 5cx 2l 3r
+                #server.send(print_bytes) #GCC Axes - 0:LStickX 1:LStickY 4:CStickY 5:CStickX 2:LTrig 3:RTrig
 print("clearing everything...")
 server.clear_everything()
 for i in range(1,50):
