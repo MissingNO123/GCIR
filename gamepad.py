@@ -184,8 +184,8 @@ while done==False:
                         if event.axis == 3: #r trig
                                 if event.value >= 0: server.press(HIDButtons.R)
                                 else: server.unpress(HIDButtons.R)
-                        if event.axis == 4: print("soon") #rs y
-                        if event.axis == 5: print("TM")   #rs x
+                        if event.axis == 4: server.cstick_coords[1] = int(-32767*event.value)  #rs y
+                        if event.axis == 5: server.cstick_coords[0] = int(32767*event.value) #rs x
                         server.send(print_bytes)
                         
                 #server.send(print_bytes)       #0sx 1sy 4cy 5cx 2l 3r
