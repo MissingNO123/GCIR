@@ -14,3 +14,5 @@ If you want a high-numbered button (like the XBox 360 Guide button, 15 on some O
 
 To remap joystick axes (if your controller for some reason uses different ones) find `pygame.JOYAXISMOTION` with ctrl+f and change the joystick axis indices (`event.axis == 0` etc). 
 ~~(I will fix that later)~~
+
+When cloning this repository, make sure to use `--recursive` to download the necessary submodule.

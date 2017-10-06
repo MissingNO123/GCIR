@@ -12,20 +12,20 @@ done=False
 #Change this to True to print bytes that are sent
 print_bytes = False
 
-buttonMappings = [
-                HIDButtons.A,
-                HIDButtons.B,
-                HIDButtons.X,
-                HIDButtons.Y,
-                HIDButtons.SELECT, #Z
-                HIDButtons.R,
-                HIDButtons.L,
-                HIDButtons.START,
-                HIDButtons.DPADUP,
-                HIDButtons.DPADDOWN,
-                HIDButtons.DPADLEFT,
-                HIDButtons.DPADRIGHT
-        ]
+buttonMappings = {
+                0: HIDButtons.A,
+                1: HIDButtons.B,
+                2: HIDButtons.X,
+                3: HIDButtons.Y,
+                4: HIDButtons.SELECT, #Z
+                5: HIDButtons.R,
+                6: HIDButtons.L,
+                7: HIDButtons.START,
+                8: HIDButtons.DPADUP,
+                9: HIDButtons.DPADDOWN,
+                10: HIDButtons.DPADLEFT,
+                11: HIDButtons.DPADRIGHT
+        }
 
 class KBDButtons(int):
         C_UP = pygame.K_w
@@ -51,6 +51,10 @@ class KBDButtons(int):
 
         HOME = pygame.K_HOME
         POWER = pygame.K_END
+
+def handle_unmapped_button(event):
+        #todo: Add a graphical warning of some kind, or allow users to rebind
+        print("[Warning] Joystick {} button {} is not mapped to any button.".format(event.joy,event.button))
 
 if len(sys.argv) < 2:
         serverCount = int(input("How many 3DSes are you connecting? >"))
@@ -223,15 +227,21 @@ while done==False:
                                         servers[i].special_unpress(Special_Buttons.POWER)
                                 servers[i].send(print_bytes)
 
-                        # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
-                        if event.type == pygame.JOYBUTTONDOWN:
-                                print("Joystick {} button {} pressed.".format(event.joy,event.button))
-                                servers[i].press(buttonMappings[event.button])
-                                servers[i].send(print_bytes)
-                        if event.type == pygame.JOYBUTTONUP:
-                                print("Joystick {} button {} released.".format(event.joy,event.button))
-                                servers[i].unpress(buttonMappings[event.button])
-                                servers[i].send(print_bytes)
+				        # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
+				        if event.type == pygame.JOYBUTTONDOWN:
+				                print("Joystick {} button {} pressed.".format(event.joy,event.button))
+				                if event.button in buttonMappings:
+				                        servers[i].press(buttonMappings[event.button])
+				                        servers[i].send(print_bytes)
+				                else:
+				                        handle_unmapped_button(event)
+				        if event.type == pygame.JOYBUTTONUP:
+				                print("Joystick {} button {} released.".format(event.joy,event.button))
+				                if event.button in buttonMappings:
+				                        servers[i].unpress(buttonMappings[event.button])
+				                        servers[i].send(print_bytes)
+				                else:
+				                        handle_unmapped_button(event)
                         if event.type == pygame.JOYAXISMOTION:
                                 #if event.axis in range(2,3): print("Joystick {} axis {} moved to {}.".format(event.joy,event.axis, event.value))
                                 if event.axis == 0: servers[i].circle_pad_coords[0] = int(32767*event.value) #ls x
