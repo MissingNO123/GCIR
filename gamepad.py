@@ -1,8 +1,18 @@
 print("please wait...")
 import sys, time
 from TPPFLUSH.tppflush import *
-import pygame
+
+if len(sys.argv) < 2:
+	server = input("3DS IP >").strip()
+else:
+        server = sys.argv[1]
+        
+server=LumaInputServer(server)
+
 from enum import IntEnum
+import tkinter as tk
+from tkinter import messagebox
+import pygame
 
 done=False
 
@@ -49,25 +59,44 @@ class KBDButtons(IntEnum):
         HOME = pygame.K_HOME
         POWER = pygame.K_END
 
-def handle_unmapped_button(event):
-        #todo: Add a graphical warning of some kind, or allow users to rebind
-        print("[Warning] Joystick {} button {} is not mapped to any button.".format(event.joy,event.button))
+########### TKINTER ###########
 
-if len(sys.argv) < 2:
-	server = input("3DS IP >").strip()
-else:
-        server = sys.argv[1]
+root = tk.Tk()
+root.title("Options")
+
+def updateServerIP():
+   serverIP = serverIPInputBox.get()
+   server=LumaInputServer(serverIP)
+   print("Changed 3DS IP to ", serverIP)
+
+serverIPInputLabel = tk.Label(root, text="3DS IP")
+serverIPInputBox = tk.Entry(root, textvariable=serverIP)
+serverIPUpdateButton = tk.Button(root, text ="Update", command = updateServerIP)
+
+serverIPInputLabel.grid(row=0,column=0)
+serverIPInputBox.grid(row=0,column=1)
+serverIPUpdateButton.grid(row=0,column=2)
+
+def rootClosing():
+        if tk.messagebox.askokcancel("Quit", "Are you sure you want to quit?"):
+                exitProgram()
+
+def exitProgram():
+        print("clearing everything...")
+        server.clear_everything()
+        server.send(print_bytes)
+        raise SystemExit(0)
+        root.quit()
+        pygame.quit()
         
-server=LumaInputServer(server)
+root.protocol("WM_DELETE_WINDOW", rootClosing)
 
-#time.sleep(3)
-#server.hid_press(HIDButtons.X) #to show it works
-#server.send(print_bytes)
+########## PYGAME ##########
 
 pygame.init()
 screen = pygame.display.set_mode((320, 240))
 #screen.fill((0,0,0))
-TCImg="images/home.jpg"
+TCImg="images/home.jpg" #Touch screen image file
 try:
         img=pygame.image.load(TCImg)
 except pygame.error:
@@ -97,6 +126,12 @@ for i in range(joystick_count):
         hats = joystick.get_numhats()
         print(" Number of hats: {}".format(hats))
 
+def handle_unmapped_button(event):
+        #todo: Add a graphical warning of some kind, or allow users to rebind
+        print("[Warning] Joystick {} button {} is not mapped to any button.".format(event.joy,event.button))
+
+########### MAIN LOOP ###########
+	
 print("ready!")
 while done==False:
         for event in pygame.event.get(): # User did something
@@ -208,6 +243,7 @@ while done==False:
                         server.send(print_bytes)
                         
                 #server.send(print_bytes) #GCC Axes - 0:LStickX 1:LStickY 4:CStickY 5:CStickX 2:LTrig 3:RTrig
+	root.update()
 print("clearing everything...")
 server.clear_everything()
 for i in range(1,50):
